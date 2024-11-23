@@ -8,26 +8,33 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthCredentials } from "@/types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "@/utils/auth";
+import api from "@/services/api";
 
 export function LoginPage() {
-  const [credentials, setCredentials] = useState<AuthCredentials>({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await loginUser(credentials);
-    if (success) navigate("/");
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Invalid credentials");
+    }
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex h-screen w-full items-center justify-center px-4"
+    >
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -45,11 +52,9 @@ export function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                value={credentials.email}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, email: e.target.value })
-                }
               />
             </div>
             <div className="grid gap-2">
@@ -59,10 +64,8 @@ export function LoginPage() {
               <Input
                 id="password"
                 type="password"
-                value={credentials.password}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, password: e.target.value })
-                }
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />{" "}
               <div className="flex items-center">
@@ -71,13 +74,7 @@ export function LoginPage() {
                 </span>
               </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              onClick={(e) => {
-                handleLogin(e);
-              }}
-            >
+            <Button type="submit" className="w-full">
               Login
             </Button>
           </div>
@@ -87,6 +84,6 @@ export function LoginPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </form>
   );
 }
