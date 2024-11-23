@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "@/utils/auth";
 
-export function LoginPage() {
+export function RegisterPage() {
   const [credentials, setCredentials] = useState<AuthCredentials>({
     email: "",
     password: "",
@@ -30,13 +30,28 @@ export function LoginPage() {
     <div className="flex h-screen w-full items-center justify-center px-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Register</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email" className="text-left">
+                Username
+              </Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="username"
+                required
+                value={credentials.email}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, email: e.target.value })
+                }
+              />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email" className="text-left">
                 Email
@@ -64,7 +79,7 @@ export function LoginPage() {
                   setCredentials({ ...credentials, password: e.target.value })
                 }
                 required
-              />{" "}
+              />
               <div className="flex items-center">
                 <span className="ml-auto inline-block text-sm underline">
                   Forgot your password?
@@ -78,12 +93,11 @@ export function LoginPage() {
                 handleLogin(e);
               }}
             >
-              Login
+              Register
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <span className="underline">Sign up</span>
+            Already have an account? <span className="underline">Sign in</span>
           </div>
         </CardContent>
       </Card>
