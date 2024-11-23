@@ -68,11 +68,6 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />{" "}
-              <div className="flex items-center">
-                <span className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </span>
-              </div>
             </div>
             <Button type="submit" className="w-full">
               Login
