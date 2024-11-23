@@ -75,7 +75,14 @@ export function LoginPage() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <span className="underline">Sign up</span>
+            <span
+              className="underline cursor-pointer"
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              Sign up
+            </span>
           </div>
         </CardContent>
       </Card>
