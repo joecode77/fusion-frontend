@@ -8,26 +8,32 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthCredentials } from "@/types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "@/utils/auth";
+import api from "@/services/api";
 
 export function RegisterPage() {
-  const [credentials, setCredentials] = useState<AuthCredentials>({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await loginUser(credentials);
-    if (success) navigate("/");
+    try {
+      await api.post("/auth/register", { email, password, username });
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Error registering user");
+    }
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex h-screen w-full items-center justify-center px-4"
+    >
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Register</CardTitle>
@@ -46,10 +52,8 @@ export function RegisterPage() {
                 type="text"
                 placeholder="username"
                 required
-                value={credentials.email}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, email: e.target.value })
-                }
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -61,10 +65,8 @@ export function RegisterPage() {
                 type="email"
                 placeholder="m@example.com"
                 required
-                value={credentials.email}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, email: e.target.value })
-                }
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -74,33 +76,28 @@ export function RegisterPage() {
               <Input
                 id="password"
                 type="password"
-                value={credentials.password}
-                onChange={(e) =>
-                  setCredentials({ ...credentials, password: e.target.value })
-                }
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <div className="flex items-center">
-                <span className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </span>
-              </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              onClick={(e) => {
-                handleLogin(e);
-              }}
-            >
+            <Button type="submit" className="w-full">
               Register
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
-            Already have an account? <span className="underline">Sign in</span>
+            Already have an account?{" "}
+            <span
+              className="underline cursor-pointer"
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              Sign in
+            </span>
           </div>
         </CardContent>
       </Card>
-    </div>
+    </form>
   );
 }
