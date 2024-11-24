@@ -23,7 +23,7 @@ const LandingPage = () => {
             Boost your productivity with streamlined tools for tracking goals,
             managing tasks, and staying organized. Simplify your workflow,
             achieve milestones, and make progress every day, all in one
-            intuitive platform.
+            intuitive platform
           </p>
           <div className="flex justify-center">
             <button
