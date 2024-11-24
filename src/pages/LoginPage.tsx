@@ -26,6 +26,7 @@ export function LoginPage() {
       localStorage.setItem("token", data.token);
       navigate("/dashboard");
     } catch (err) {
+      console.log(error);
       setError("Invalid credentials");
     }
   };

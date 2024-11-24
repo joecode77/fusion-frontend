@@ -23,7 +23,7 @@ export function RegisterPage() {
     e.preventDefault();
     try {
       await api.post("/auth/register", { email, password, username });
-      navigate("/dashboard");
+      navigate("/login");
     } catch (err) {
       console.error("Error registering user");
     }
