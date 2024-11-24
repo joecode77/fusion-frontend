@@ -1,0 +1,14 @@
+tbody {
+  position: relative;
+}
+
+tr {
+  position: relative;
+  z-index: 1;
+}
+
+.dragging {
+  z-index: 10;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
